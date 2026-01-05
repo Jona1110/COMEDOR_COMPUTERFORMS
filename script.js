@@ -21,7 +21,7 @@ async function buscarNombre() {
     const btn = document.getElementById('btnRegistrar');
     const id = idInput.value;
     
-    if (id.length >= 3) {
+    if (id.length >= 4) {
         display.innerText = "Buscando...";
         display.style.color = "var(--accent-yellow)";
 
@@ -29,14 +29,12 @@ async function buscarNombre() {
             const res = await fetch(`${scriptURL}?id=${id}`);
             const respuesta = await res.text();
             
-            // CASO 1: El ID no existe en la lista de empleados
             if (respuesta === "No encontrado") {
                 display.innerText = "ID NO REGISTRADO (RH avisado)";
                 display.style.color = "#ff7675"; // Rojo/Salmón
                 btn.disabled = true;
                 btn.style.opacity = "0.5";
             } 
-            // CASO 2: El ID ya marcó en los últimos 20 minutos
             else if (respuesta.includes("Duplicado")) {
                 const minutosRestantes = respuesta.split(":")[1];
                 display.innerText = `YA MARCADO (Faltan ${minutosRestantes} min)`;
@@ -44,7 +42,6 @@ async function buscarNombre() {
                 btn.disabled = true;
                 btn.style.opacity = "0.5";
             } 
-            // CASO 3: Éxito, empleado encontrado y listo para marcar
             else {
                 display.innerText = `¡HOLA, ${respuesta.toUpperCase()}!`;
                 display.style.color = "var(--accent-yellow)";
@@ -71,14 +68,11 @@ async function obtenerRegistrosDeSheets() {
         feed.innerHTML = ''; 
         
         registros.forEach(reg => {
-            // Simplificar Hora
             let horaSimple = "00:00:00";
             if (reg.hora) {
                 const h = new Date(reg.hora);
                 horaSimple = !isNaN(h) ? h.toLocaleTimeString('es-MX', {hour12:false}) : reg.hora.toString().substring(0,8);
             }
-
-            // Simplificar Fecha
             let fechaSimple = "";
             if (reg.fecha) {
                 const f = new Date(reg.fecha);
@@ -115,11 +109,9 @@ async function registrar() {
     const display = document.getElementById('nombreEmpleado');
     const btn = document.getElementById('btnRegistrar');
     const id = idInput.value;
-    
-    // Limpieza de nombre
+
     const nombre = display.innerText.replace('¡HOLA, ', '').replace('!', '');
 
-    // Bloqueo preventivo en el cliente
     if (!id || display.innerText.includes("Listo") || btn.disabled || display.innerText === "Buscando...") return;
 
     btn.innerText = "REGISTRANDO...";
@@ -134,7 +126,7 @@ async function registrar() {
 
         idInput.value = '';
         display.innerText = "¡REGISTRO EXITOSO!";
-        display.style.color = "#55efc4"; // Verde éxito
+        display.style.color = "#55efc4";
         
         setTimeout(obtenerRegistrosDeSheets, 1500);
         setTimeout(() => { 
@@ -147,6 +139,6 @@ async function registrar() {
         btn.disabled = false;
         btn.innerText = "Confirmar Registro";
     } finally {
-        // El botón se rehabilita solo tras el timeout de arriba o cambio de ID
     }
+
 }
