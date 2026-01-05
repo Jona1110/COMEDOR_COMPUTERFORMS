@@ -73,7 +73,7 @@ button:active { transform: translateY(4px); box-shadow: none; }
 #nombreEmpleado { font-weight: 600; color: var(--accent-yellow); font-size: 1.2rem; }
 
 .main-content { flex: 1; background-color: var(--bg-light); padding: 60px; display: flex; flex-direction: column; align-items: center; }
-#reloj { font-size: 8rem; font-weight: 800; color: var(--accent-red); letter-spacing: -4px; margin-bottom: 10px; }
+#reloj { font-size: 7rem; font-weight: 800; color: var(--accent-red); letter-spacing: -4px; margin-bottom: 10px; }
 #fecha { font-size: 1.3rem; color: var(--text-muted); text-transform: capitalize; }
 
 .recent-activity { width: 100%; max-width: 550px; }
