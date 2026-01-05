@@ -21,7 +21,8 @@ async function buscarNombre() {
     const btn = document.getElementById('btnRegistrar');
     const id = idInput.value;
     
-    if (id.length >= 4) {
+
+    if (id.length === 4) {
         display.innerText = "Buscando...";
         display.style.color = "var(--accent-yellow)";
 
@@ -31,14 +32,14 @@ async function buscarNombre() {
             
             if (respuesta === "No encontrado") {
                 display.innerText = "ID NO REGISTRADO (RH avisado)";
-                display.style.color = "#ff7675"; // Rojo/Salmón
+                display.style.color = "#ff7675"; 
                 btn.disabled = true;
                 btn.style.opacity = "0.5";
             } 
             else if (respuesta.includes("Duplicado")) {
                 const minutosRestantes = respuesta.split(":")[1];
                 display.innerText = `YA MARCADO (Faltan ${minutosRestantes} min)`;
-                display.style.color = "#fdcb6e"; // Naranja
+                display.style.color = "#fdcb6e"; 
                 btn.disabled = true;
                 btn.style.opacity = "0.5";
             } 
@@ -53,10 +54,11 @@ async function buscarNombre() {
             display.innerText = "Error de conexión";
         }
     } else {
+        
         display.innerText = "Listo para marcar";
         display.style.color = "var(--white)";
-        btn.disabled = false;
-        btn.style.opacity = "1";
+        btn.disabled = true; 
+        btn.style.opacity = "0.5";
     }
 }
 
@@ -73,6 +75,7 @@ async function obtenerRegistrosDeSheets() {
                 const h = new Date(reg.hora);
                 horaSimple = !isNaN(h) ? h.toLocaleTimeString('es-MX', {hour12:false}) : reg.hora.toString().substring(0,8);
             }
+
             let fechaSimple = "";
             if (reg.fecha) {
                 const f = new Date(reg.fecha);
@@ -109,7 +112,7 @@ async function registrar() {
     const display = document.getElementById('nombreEmpleado');
     const btn = document.getElementById('btnRegistrar');
     const id = idInput.value;
-
+    
     const nombre = display.innerText.replace('¡HOLA, ', '').replace('!', '');
 
     if (!id || display.innerText.includes("Listo") || btn.disabled || display.innerText === "Buscando...") return;
@@ -126,19 +129,23 @@ async function registrar() {
 
         idInput.value = '';
         display.innerText = "¡REGISTRO EXITOSO!";
-        display.style.color = "#55efc4";
+        display.style.color = "#55efc4"; 
         
         setTimeout(obtenerRegistrosDeSheets, 1500);
+
         setTimeout(() => { 
             display.innerText = "Listo para marcar"; 
             display.style.color = "var(--white)";
+            btn.innerText = "Confirmar Registro"; 
+            btn.disabled = true;               
+            btn.style.opacity = "0.5";
+            idInput.focus();                    
         }, 3000);
 
     } catch (e) {
         alert("Error de conexión");
         btn.disabled = false;
         btn.innerText = "Confirmar Registro";
-    } finally {
+        btn.style.opacity = "1";
     }
-
 }
