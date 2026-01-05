@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function updateTime() {
     const now = new Date();
+    // CAMBIO A 12 HORAS
     document.getElementById('reloj').innerText = now.toLocaleTimeString('es-MX', { 
-        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
     });
     const options = { weekday: 'long', day: 'numeric', month: 'long' };
     document.getElementById('fecha').innerText = now.toLocaleDateString('es-MX', options);
@@ -20,7 +21,6 @@ async function buscarNombre() {
     const display = document.getElementById('nombreEmpleado');
     const btn = document.getElementById('btnRegistrar');
     const id = idInput.value;
-    
 
     if (id.length === 4) {
         display.innerText = "Buscando...";
@@ -54,7 +54,6 @@ async function buscarNombre() {
             display.innerText = "Error de conexión";
         }
     } else {
-        
         display.innerText = "Listo para marcar";
         display.style.color = "var(--white)";
         btn.disabled = true; 
@@ -73,7 +72,8 @@ async function obtenerRegistrosDeSheets() {
             let horaSimple = "00:00:00";
             if (reg.hora) {
                 const h = new Date(reg.hora);
-                horaSimple = !isNaN(h) ? h.toLocaleTimeString('es-MX', {hour12:false}) : reg.hora.toString().substring(0,8);
+                // CAMBIO A 12 HORAS EN EL HISTORIAL
+                horaSimple = !isNaN(h) ? h.toLocaleTimeString('es-MX', {hour12:true, hour:'2-digit', minute:'2-digit', second:'2-digit'}) : reg.hora.toString().substring(0,8);
             }
 
             let fechaSimple = "";
@@ -96,7 +96,7 @@ async function obtenerRegistrosDeSheets() {
                             ID: ${reg.id} <span style="margin: 0 5px;">•</span> ${fechaSimple}
                         </div>
                     </div>
-                    <div style="font-family: monospace; font-weight: 800; color: var(--accent-red); font-size: 1.1rem;">
+                    <div style="font-family: monospace; font-weight: 800; color: var(--accent-red); font-size: 0.9rem;">
                         ${horaSimple}
                     </div>
                 </div>`;
